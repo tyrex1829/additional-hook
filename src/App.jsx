@@ -12,13 +12,23 @@ function useTodos(n) {
   const [todo, setTodo] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  function getData(n) {
+    axios.get("https://sum-server.100xdevs.com/todos").then((res) => {
+      setTodo(res.data.todos);
+      setLoading(false);
+    });
+  }
+
   useEffect(() => {
-    setInterval(() => {
-      axios.get("https://sum-server.100xdevs.com/todos").then((res) => {
-        setTodo(res.data.todos);
-        setLoading(false);
-      });
+    const value = setInterval(() => {
+      getData();
     }, 1000 * n);
+
+    getData();
+
+    return () => {
+      clearInterval(value);
+    };
   }, [n]);
 
   return { todo, loading };
