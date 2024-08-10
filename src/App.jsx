@@ -8,28 +8,28 @@ import Todo from "./components/Todo";
 import axios from "axios";
 
 // custom hook
-function useTodos() {
+function useTodos(n) {
   const [todo, setTodo] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get("https://sum-server.100xdevs.com/todos").then((res) => {
-      setTodo(res.data.todos);
-    });
-  }, []);
+    setInterval(() => {
+      axios.get("https://sum-server.100xdevs.com/todos").then((res) => {
+        setTodo(res.data.todos);
+        setLoading(false);
+      });
+    }, 1000 * n);
+  }, [n]);
 
-  return todo;
+  return { todo, loading };
 }
 
 function App() {
-  const [count, setCount] = useState(0);
-  const [render, setRender] = useState(true);
-  const todo = useTodos();
+  const { todo, loading } = useTodos(5);
 
   return (
     <>
-      {todo.map((t) => (
-        <Todo key={t.id} todo={t} />
-      ))}
+      {loading ? "Loading..." : todo.map((t) => <Todo key={t.id} todo={t} />)}
     </>
   );
 }
