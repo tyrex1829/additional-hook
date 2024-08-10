@@ -39,25 +39,51 @@ import axios from "axios";
 //   return position;
 // }
 
-function useInterval(fn, timeout) {
+// function useInterval(fn, timeout) {
+//   useEffect(() => {
+//     const value = setInterval(() => {
+//       fn();
+//     }, timeout);
+//     return () => {
+//       clearInterval(value);
+//     };
+//   }, [timeout]);
+// }
+
+function useDebounce(v, t) {
+  const [debouncedValue, setDebouncedValue] = useState(v);
+
   useEffect(() => {
-    const value = setInterval(() => {
-      fn();
-    }, timeout);
+    setTimeout(() => {
+      setDebouncedValue(v + debouncedValue);
+    }, t);
     return () => {
-      clearInterval(value);
+      setTimeout(() => {
+        setDebouncedValue(v + debouncedValue);
+      }, t);
     };
-  }, [timeout]);
+  }, [v]);
+
+  return debouncedValue;
 }
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [inputValue, setInputValue] = useState("");
+  const debouncedValue = useDebounce(inputValue, 500);
 
-  useInterval(() => {
-    setCount((c) => c + 1);
-  }, 1000);
-
-  return <>Timer is at {count}</>;
+  return (
+    <>
+      Debounced value is {debouncedValue}
+      <input
+        type="text"
+        value={inputValue}
+        placeholder="Search..."
+        onChange={(e) => {
+          setInputValue(e.target.value);
+        }}
+      />
+    </>
+  );
 }
 
 export default App;
