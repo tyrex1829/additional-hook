@@ -7,41 +7,25 @@ import ClassComp from "./components/ClassComp";
 import Todo from "./components/Todo";
 import axios from "axios";
 
-// custom hook
-function useTodos(n) {
-  const [todo, setTodo] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  function getData(n) {
-    axios.get("https://sum-server.100xdevs.com/todos").then((res) => {
-      setTodo(res.data.todos);
-      setLoading(false);
-    });
-  }
+function useIsOnline() {
+  const [isOnline, setIsOnline] = useState(window.navigator.onLine);
 
   useEffect(() => {
-    const value = setInterval(() => {
-      getData();
-    }, 1000 * n);
+    window.addEventListener("online", () => {
+      setIsOnline(true);
+    });
+    window.addEventListener("offline", () => {
+      setIsOnline(false);
+    });
+  }, []);
 
-    getData();
-
-    return () => {
-      clearInterval(value);
-    };
-  }, [n]);
-
-  return { todo, loading };
+  return isOnline;
 }
 
 function App() {
-  const { todo, loading } = useTodos(5);
+  const isOnline = useIsOnline();
 
-  return (
-    <>
-      {loading ? "Loading..." : todo.map((t) => <Todo key={t.id} todo={t} />)}
-    </>
-  );
+  return <>{isOnline ? <p>You are online</p> : <p>You are offline</p>}</>;
 }
 
 export default App;
