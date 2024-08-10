@@ -27,8 +27,11 @@ export default class ClassComp extends Component {
 
   render() {
     return (
-      // for state
       <div>
+        {/* for lifecycle */}
+        <p>Lifecycle</p>
+
+        {/* for state */}
         <p>{this.state.count}</p>
         <button onClick={this.incrementCount}>Increment</button>
       </div>

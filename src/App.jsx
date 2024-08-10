@@ -17,9 +17,9 @@ function App() {
 
   return (
     <>
-      {/* <ClassComp /> */}
+      {render ? <ClassComp /> : <div></div>}
 
-      {render ? <Functional /> : <div></div>}
+      {/* {render ? <Functional /> : <div></div>} */}
     </>
   );
 }
