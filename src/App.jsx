@@ -7,16 +7,9 @@ import ClassComp from "./components/ClassComp";
 import Todo from "./components/Todo";
 import axios from "axios";
 
-function App() {
-  const [count, setCount] = useState(0);
-  const [render, setRender] = useState(true);
+// custom hook
+function useTodos() {
   const [todo, setTodo] = useState([]);
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setRender(false);
-  //   }, 10000);
-  // }, []);
 
   useEffect(() => {
     axios.get("https://sum-server.100xdevs.com/todos").then((res) => {
@@ -24,14 +17,19 @@ function App() {
     });
   }, []);
 
+  return todo;
+}
+
+function App() {
+  const [count, setCount] = useState(0);
+  const [render, setRender] = useState(true);
+  const todo = useTodos();
+
   return (
     <>
       {todo.map((t) => (
         <Todo key={t.id} todo={t} />
       ))}
-
-      {/* {render ? <ClassComp /> : <div></div>} */}
-      {/* {render ? <Functional /> : <div></div>} */}
     </>
   );
 }
