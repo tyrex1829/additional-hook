@@ -13,7 +13,7 @@ function Functional() {
       // this is clean up
       console.log("component unmounted");
     };
-  });
+  }, []);
 
   return (
     <div>
