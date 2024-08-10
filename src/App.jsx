@@ -7,25 +7,46 @@ import ClassComp from "./components/ClassComp";
 import Todo from "./components/Todo";
 import axios from "axios";
 
-function useIsOnline() {
-  const [isOnline, setIsOnline] = useState(window.navigator.onLine);
+// function useIsOnline() {
+//   const [isOnline, setIsOnline] = useState(window.navigator.onLine);
+
+//   useEffect(() => {
+//     window.addEventListener("online", () => {
+//       setIsOnline(true);
+//     });
+//     window.addEventListener("offline", () => {
+//       setIsOnline(false);
+//     });
+//   }, []);
+
+//   return isOnline;
+// }
+
+function useMousePointer() {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    window.addEventListener("online", () => {
-      setIsOnline(true);
+    window.addEventListener("mousemove", (e) => {
+      setPosition({ x: e.clientX, y: e.clientY });
     });
-    window.addEventListener("offline", () => {
-      setIsOnline(false);
-    });
+    return () => {
+      window.addEventListener("mousemove", (e) => {
+        setPosition({ x: e.clientX, y: e.clientY });
+      });
+    };
   }, []);
 
-  return isOnline;
+  return position;
 }
 
 function App() {
-  const isOnline = useIsOnline();
+  const mousePointer = useMousePointer();
 
-  return <>{isOnline ? <p>You are online</p> : <p>You are offline</p>}</>;
+  return (
+    <>
+      Your mouse position is {mousePointer.x} {mousePointer.y}
+    </>
+  );
 }
 
 export default App;
