@@ -54,15 +54,13 @@ function useDebounce(v, t) {
   const [debouncedValue, setDebouncedValue] = useState(v);
 
   useEffect(() => {
-    setTimeout(() => {
-      setDebouncedValue(v + debouncedValue);
+    const value = setTimeout(() => {
+      setDebouncedValue(v);
     }, t);
     return () => {
-      setTimeout(() => {
-        setDebouncedValue(v + debouncedValue);
-      }, t);
+      clearTimeout(value);
     };
-  }, [v]);
+  }, [v, t]);
 
   return debouncedValue;
 }
