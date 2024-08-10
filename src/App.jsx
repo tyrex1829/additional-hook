@@ -22,31 +22,42 @@ import axios from "axios";
 //   return isOnline;
 // }
 
-function useMousePointer() {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+// function useMousePointer() {
+//   const [position, setPosition] = useState({ x: 0, y: 0 });
 
+//   useEffect(() => {
+//     window.addEventListener("mousemove", (e) => {
+//       setPosition({ x: e.clientX, y: e.clientY });
+//     });
+//     return () => {
+//       window.addEventListener("mousemove", (e) => {
+//         setPosition({ x: e.clientX, y: e.clientY });
+//       });
+//     };
+//   }, []);
+
+//   return position;
+// }
+
+function useInterval(fn, timeout) {
   useEffect(() => {
-    window.addEventListener("mousemove", (e) => {
-      setPosition({ x: e.clientX, y: e.clientY });
-    });
+    const value = setInterval(() => {
+      fn();
+    }, timeout);
     return () => {
-      window.addEventListener("mousemove", (e) => {
-        setPosition({ x: e.clientX, y: e.clientY });
-      });
+      clearInterval(value);
     };
-  }, []);
-
-  return position;
+  }, [timeout]);
 }
 
 function App() {
-  const mousePointer = useMousePointer();
+  const [count, setCount] = useState(0);
 
-  return (
-    <>
-      Your mouse position is {mousePointer.x} {mousePointer.y}
-    </>
-  );
+  useInterval(() => {
+    setCount((c) => c + 1);
+  }, 1000);
+
+  return <>Timer is at {count}</>;
 }
 
 export default App;
